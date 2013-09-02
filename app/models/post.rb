@@ -4,7 +4,8 @@ class Post < ActiveRecord::Base
 
   scope :recent, order: "created_at DESC", limit: 5
 
-  before_save :titleize_title,
+  before_save :titleize_title
+  after_save :slugalize
 
   validates_presence_of :title, :content
 
@@ -14,13 +15,9 @@ class Post < ActiveRecord::Base
     self.title = title.titleize
   end
 
-  def slugalize(string)
-    string.gsub!(/[^\x00-\x7F]+/, '')
-    string.gsub!(/[^a-z0-9\-_\+]+/, '-')
-    string.gsub!(/-{2,}/, '-')
-    string.gsub!(/^-|-$/, '')
-    string.downcase!
-    string
+  def slugalize
+    title = self.title
+    self.slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
   end
 
 end
