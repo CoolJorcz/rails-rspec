@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+
 feature 'Admin panel' do
   context "on admin homepage" do
     it "can see a list of recent posts"
